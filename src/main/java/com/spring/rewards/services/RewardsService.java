@@ -85,18 +85,37 @@ public class RewardsService {
 	        Optional<Employee> employeeOptional = empRepo.findById(empId);
 
 	        if (employeeOptional.isEmpty()) {
-	            throw new EntityNotFoundException("Employee with id " + empId + " does not exist.");
+	            throw new EntityNotFoundException("Employee ;;with id " + empId + " does not exist.");
 	        }
 
 	        Employee parentEmployee = employeeOptional.get();
 
-	        // Assuming you have a method to filter rewards based on a condition (e.g., pending status)
 	        return parentEmployee.getRewards().stream()
 	                .filter(reward -> "Pending".equals(reward.getStatus()))
 	                .collect(Collectors.toList());
 	    }
+	 
+	 
+	 
+	 
 	 public List<RewardsDropDown> getAllRewardsDropDown() {
 	        return rewardsDDR.findAll();
 	    }
-	
+	 
+	 
+	 public List<Rewards> getRewardsForUser(long empId) {
+		    return rewardRepo.findByEmpId(empId);
+		}
+	 
+	 public String getEmpName(long empId) {
+		 Optional<Employee> optEmp= empRepo.findById(empId);
+		 if(optEmp.isEmpty()) {
+			 throw new EntityNotFoundException("Employee with id " + empId + " does not exist.");
+		 }
+		 Employee employee= optEmp.get();
+		 return employee.getEmpName();
+		 
+		 
+	 }
+
 }

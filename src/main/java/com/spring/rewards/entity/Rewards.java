@@ -1,6 +1,7 @@
 package com.spring.rewards.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Rewards {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +31,7 @@ public class Rewards {
 	private String comments;
 	private String status;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_emp_id")
     @JsonIgnore
 	private Employee parent;

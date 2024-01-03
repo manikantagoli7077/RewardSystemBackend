@@ -45,7 +45,7 @@ public class Employee {
 	private User user;
 	
 	
-	@OneToMany(fetch= FetchType.LAZY,mappedBy="parent",cascade= CascadeType.ALL)
+	@OneToMany(fetch= FetchType.EAGER,mappedBy="parent",cascade= CascadeType.ALL)
 	private List<Rewards> rewards= new ArrayList<>();
 	
 	  public void addReward(Rewards reward) {

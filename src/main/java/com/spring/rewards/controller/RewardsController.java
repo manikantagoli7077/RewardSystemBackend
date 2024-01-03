@@ -96,10 +96,43 @@ public class RewardsController {
         }
     }
     
+    
+    
     @GetMapping("/all")
     public List<RewardsDropDown> getAllRewardsDropDown() {
         return rewardsService.getAllRewardsDropDown();
     }
+    
+    
+    
+     
+    @GetMapping("/myrequests/{empId}")
+    public ResponseEntity<Object> getRewardRequestsForUser(@PathVariable Long empId) {
+
+        try {
+            List<Rewards> rewardRequests = rewardsService.getRewardsForUser(empId);
+
+            if (!rewardRequests.isEmpty()) {
+                return ResponseEntity.ok(rewardRequests);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @GetMapping("/getname/{empId}")
+    public String getEmpName(@PathVariable Long empId) {
+    	return rewardsService.getEmpName(empId);
+    }
+    
+    
+    
     
     
 
