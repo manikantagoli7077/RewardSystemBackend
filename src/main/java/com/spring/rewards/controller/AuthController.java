@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,11 +28,13 @@ import com.spring.rewards.entity.Employee;
 import com.spring.rewards.entity.Role;
 import com.spring.rewards.entity.User;
 import com.spring.rewards.request.LoginRequest;
+import com.spring.rewards.request.ResetPassword;
 import com.spring.rewards.request.SignupRequest;
 import com.spring.rewards.response.JwtResponse;
 import com.spring.rewards.response.MessageResponse;
 import com.spring.rewards.security.jwt.JwtUtils;
 import com.spring.rewards.security.services.UserDetailsImpl;
+import com.spring.rewards.services.AuthService;
 
 
 
@@ -57,6 +60,9 @@ public class AuthController
 	
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	@Autowired
+	AuthService userService;
 	
 //	@PostMapping("/signup")
 //	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest)
@@ -114,6 +120,18 @@ public class AuthController
 			employee.setActiveStatus(true);
 			userRepo.save(employee);
 			return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getEmpId(), userDetails.getEmail(), role));
+		}
+	
+
+		@PostMapping("/reset")
+		public ResponseEntity<String> resetPassword(@RequestBody ResetPassword resetPassword) {
+			try {
+				userService.resetPassword(resetPassword.getEmail(), resetPassword.getCurrentPassword(),
+						resetPassword.getNewPassword());
+				return ResponseEntity.ok("password reset successfully");
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			}
 		}
 	}
 	
